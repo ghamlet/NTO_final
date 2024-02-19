@@ -4,6 +4,8 @@ import pigpio
 import os
 import time
 
+import recording_of_road
+
 from arduino import Arduino
 ARDUINO_PORT = "/dev/ttyACM0"
 CAMERA_ID = '/dev/video0'
@@ -16,6 +18,8 @@ time.sleep(1)
 
 
 cap = cv2.VideoCapture(0)
+out = recording_of_road.setup(cap)
+
 
 
 angle = 1400
@@ -26,12 +30,14 @@ count_for_mid = 0
 
 TURN = False
 MID_ROAD = True
-RIGHT_TURN = False
+RIGHT_TURN = False 
 LEFT_TURN = False
 
 RIGHT_LINE =True
 
 ERROR = []
+
+record = False
 
 
 # os.system("sudo pigpiod")  # Launching GPIO library
@@ -85,6 +91,10 @@ try:
         ret, frame = cap.read()
         if not ret:
             break
+        
+        if record:
+            out.write(frame)
+            cv2.waitKey(1)
 
         resized = cv2.resize(frame, (SIZE[1], SIZE[0]))
 
