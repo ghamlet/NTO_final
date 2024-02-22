@@ -1,21 +1,21 @@
 import cv2
 
 
-config_path = "Traffic-Sign-Dataset-YOLOv4-Tiny/cfg/yolov4-tiny-custom-traffic.cfg"  
-weights_path = "Traffic-Sign-Dataset-YOLOv4-Tiny/backup/yolov4-tiny-custom-traffic_last.weights"
+config_path = "traffic/cfg/yolov4-tiny-obj.cfg"  
+weights_path = "traffic/backup/yolov4-tiny-obj_final.weights"
 
-with open("Traffic-Sign-Dataset-YOLOv4-Tiny/data/obj.names", "r") as f:
-    classes = [line.strip() for line in f.readlines()]
-
+# with open("Traffic-Sign-Dataset-YOLOv4-Tiny/data/obj.names", "r") as f:
+    #classes = [line.strip() for line in f.readlines()]
+classes = ["people"]
 
 net = cv2.dnn.readNetFromDarknet(config_path, weights_path)
 
 
 yolo_model = cv2.dnn.DetectionModel(net)
-yolo_model.setInputParams(size= (608,608), scale= 1/255, swapRB=True)
+yolo_model.setInputParams(size= (416,416), scale= 1/255, swapRB=True)
 
-video = cv2.VideoCapture(0)
-
+# video = cv2.VideoCapture("traffic/video_2024-02-23_02-28-20.mp4")
+video= cv2.VideoCapture(0)
 
 while True:
     ret, frame = video.read()
